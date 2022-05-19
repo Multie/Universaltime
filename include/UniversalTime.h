@@ -1,0 +1,107 @@
+
+
+#ifndef UniversalTime_h
+#define UniversalTime_h
+#include "Arduino.h"
+
+#ifndef unsignedLongOverflow
+#define unsignedLongOverflow 2147483648.0
+#endif
+
+class UniversalTime
+{
+
+public:
+    static UniversalTime UniversalTimeNow;
+    static UniversalTime Now()
+    {
+
+        static unsigned long UniversalTimeMillisTimestemp;
+        static unsigned long UniversalTimeMillisOffsetTimestemp;
+
+        if (UniversalTimeMillisTimestemp == UniversalTimeMillisOffsetTimestemp)
+        {
+            UniversalTimeMillisOffsetTimestemp = unsignedLongOverflow;
+        }
+        unsigned long mill = millis();
+        unsigned long offest = mill + unsignedLongOverflow;
+        int diff1 = mill - UniversalTimeMillisTimestemp;
+        int diff2 = offest - UniversalTimeMillisOffsetTimestemp;
+        UniversalTimeMillisTimestemp = mill;
+        UniversalTimeMillisOffsetTimestemp = offest;
+        UniversalTimeNow.addMillisecond(max(diff1, diff2));
+        return UniversalTimeNow;
+    }
+    static void setNow(UniversalTime time)
+    {
+        UniversalTime::UniversalTimeNow = time;
+    }
+    // Get
+    int getYear();
+    int getMonth();
+    int getDay();
+    int getHour();
+    int getMinute();
+    int getSecond();
+    int getMillisecond();
+    int getMicosecond();
+    // Set
+    void setYear(int year);
+    void setMonth(int month);
+    void setDay(int day);
+    void setHour(int hour);
+    void setMinute(int minute);
+    void setSecond(int second);
+    void setMillisecond(int millisecond);
+    void setMicosecond(int microsecond);
+    void setTime(UniversalTime time);
+    // Add
+    void addYear(int year);
+    void addMonth(int month);
+    void addDay(int day);
+    void addHour(int hour);
+    void addMinute(int minute);
+    void addSecond(int second);
+    void addMillisecond(int millisecond);
+    void addMicosecond(int microsecond);
+
+    void addTime(UniversalTime time);
+    UniversalTime add(UniversalTime time);
+    void subtractTime(UniversalTime time);
+    UniversalTime subtract(UniversalTime time);
+
+    double toUniversalTime();
+    void fromUnsiversalTime(double time);
+    int compare(UniversalTime time);
+    int compare(
+        UniversalTime time,
+        double filterYear,
+        double filterMonth,
+        double filterDay,
+        double filterHour,
+        double filterMinute,
+        double filterSecond,
+        double filterMilisecond,
+        double filterMicrosecond);
+    void fromISO8601(String text);
+    String toISO8601();
+    String toString();
+
+    int getWeekday();
+
+    UniversalTime getTime();
+
+    UniversalTime();
+
+private:
+    int Year;
+    int8_t Month;
+    int8_t Day;
+    int8_t Hour;
+    int8_t Minute;
+    int8_t Second;
+    int Millisecond;
+    int Microsecond;
+};
+
+#endif

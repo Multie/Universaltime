@@ -1,0 +1,29 @@
+{
+  "name": "Universaltime",
+  "version": "1.0.0",
+  "description": "A lib to work with time and typical time functions",
+  "keywords": "arduino, time, esp32, iso8601, millis",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/hello-world.git"
+  },
+  "authors": [
+    {
+      "name": "Malte Hering",
+      "email": "malte.hering@outlook.de",
+      "url": "",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "github",
+  "dependencies": {
+    "ownername/print": "~1.3.0"
+  },
+  "frameworks": "arduino",
+  "platforms": "*",
+  "headers": [
+    "UniversalTime.h",
+    "UniveralTimeFunctions.cpp"
+  ]
+}
