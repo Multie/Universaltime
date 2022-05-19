@@ -1,6 +1,6 @@
 {
   "name": "Universaltime",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A lib to work with time and typical time functions",
   "keywords": "arduino, time, esp32, iso8601, millis",
   "repository": {
@@ -15,15 +15,58 @@
       "maintainer": true
     }
   ],
-  "license": "MIT",
-  "homepage": "github",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Multie/Universaltime",
   "dependencies": {
-    "ownername/print": "~1.3.0"
   },
   "frameworks": "arduino",
   "platforms": "*",
   "headers": [
     "UniversalTime.h",
     "UniveralTimeFunctions.cpp"
+  ],
+  "examples": [
+    {
+      "name": "Now",
+      "base": "examples/Now",
+      "files": [
+        "Now.ino"
+      ]
+    },
+    {
+      "name": "TimeOn",
+      "base": "examples/TimeOn",
+      "files": [
+        "TimeOn.ino"
+      ]
+    },
+    {
+      "name": "TimeOff",
+      "base": "examples/TimeOff",
+      "files": [
+        "TimeOff.ino"
+      ]
+    },
+    {
+      "name": "Impuls",
+      "base": "examples/Impuls",
+      "files": [
+        "Impuls.ino"
+      ]
+    },
+    {
+      "name": "Interval",
+      "base": "examples/Interval",
+      "files": [
+        "Interval.ino"
+      ]
+    },
+    {
+      "name": "MinStateTime",
+      "base": "examples/MinStateTime",
+      "files": [
+        "MinStateTime.ino"
+      ]
+    }
   ]
 }

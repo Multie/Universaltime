@@ -161,6 +161,6 @@ void TimeFunction::SetDuration(UniversalTime newDuration) {
     Duration = newDuration;
 };
 
-UniversalTime TimeFunction::Duration() {
+UniversalTime TimeFunction::GetDuration() {
     return Duration;
 };
