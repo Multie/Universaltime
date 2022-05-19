@@ -8,6 +8,8 @@
 #define unsignedLongOverflow 2147483648.0
 #endif
 
+
+
 class UniversalTime
 {
 
@@ -72,7 +74,15 @@ public:
 
     double toUniversalTime();
     void fromUnsiversalTime(double time);
+    /*
+ * Compare times
+ * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
+ */
     int compare(UniversalTime time);
+   /*
+ * Compare times
+ * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
+ */
     int compare(
         UniversalTime time,
         double filterYear,

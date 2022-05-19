@@ -20,8 +20,6 @@
 #include "Arduino.h"
 #include "UniversalTime.h"
 
-#define LogDebug2(name, value)  String log = "\e[1;36m[D][" + String(__LINE__) + "][" + String(__FUNCTION__) + "]:" + name + ":" + value + "\e[1;37m"; Serial.println(log);
-
 // Einschaltverzögerung
 class TimeFunction {
     public:
@@ -32,8 +30,10 @@ class TimeFunction {
         bool Impuls(bool value);
         bool Interval();
         void SetDuration(UniversalTime newDuration);
-        UniversalTime Duration;
+        UniversalTime GetDuration();
+        
     private:
+        UniversalTime Duration;
         UniversalTime Endtime;
         bool Started;
         bool Oldstate;

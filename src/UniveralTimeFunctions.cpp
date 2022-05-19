@@ -160,3 +160,7 @@ void TimeFunction::SetDuration(UniversalTime newDuration) {
     Endtime.addTime(newDuration);
     Duration = newDuration;
 };
+
+UniversalTime TimeFunction::Duration() {
+    return Duration;
+};

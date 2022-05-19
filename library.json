@@ -5,13 +5,13 @@
   "keywords": "arduino, time, esp32, iso8601, millis",
   "repository": {
     "type": "git",
-    "url": "https://github.com/username/hello-world.git"
+    "url": "https://github.com/Multie/Universaltime.git"
   },
   "authors": [
     {
       "name": "Malte Hering",
       "email": "malte.hering@outlook.de",
-      "url": "",
+      "url": "https://github.com/Multie/Universaltime",
       "maintainer": true
     }
   ],
