@@ -8,6 +8,13 @@
 #define unsignedLongOverflow 2147483648.0
 #endif
 
+#define NOW_MILLIS 1
+#define NOW_ESP32_RTC 1
+
+#ifdef NOW_ESP32_RTC
+#include <time.h>
+#endif
+
 class UniversalTime
 {
 
@@ -15,7 +22,7 @@ public:
     static UniversalTime UniversalTimeNow;
     static UniversalTime Now()
     {
-
+        #ifdef NOW_MILLIS
         static unsigned long UniversalTimeMillisTimestemp;
         static unsigned long UniversalTimeMillisOffsetTimestemp;
 
@@ -30,12 +37,22 @@ public:
         UniversalTimeMillisTimestemp = mill;
         UniversalTimeMillisOffsetTimestemp = offest;
         UniversalTimeNow.addMillisecond(max(diff1, diff2));
+        #endif
+        #ifdef NOW_ESP32_RTC
+        time_t now;
+        struct tm timeinfo;
+        time(&now);
+        localtime_r(&now, &timeinfo);
+        UniversalTimeNow.setTime(timeinfo);
+        #endif 
         return UniversalTimeNow;
     }
     static void setNow(UniversalTime time)
     {
         UniversalTime::UniversalTimeNow = time;
     }
+    
+    
     // Get
     int getYear();
     int getMonth();
@@ -55,6 +72,7 @@ public:
     void setMillisecond(int millisecond);
     void setMicosecond(int microsecond);
     void setTime(UniversalTime time);
+    void setTime(struct tm timeinfo);
     // Add
     void addYear(int year);
     void addMonth(int month);
@@ -102,6 +120,8 @@ private:
     int8_t Second;
     int Millisecond;
     int Microsecond;
+    bool LeapYear;
 };
 
+UniversalTime UniversalTime::UniversalTimeNow;
 #endif
