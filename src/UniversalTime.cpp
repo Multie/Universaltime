@@ -50,6 +50,7 @@ int UniversalTime::getMicosecond()
 void UniversalTime::setYear(int year)
 {
     Year = year;
+    LeapYear = ((Year % 4 == 0 && Year % 100 != 0) || Year % 400 == 0);
 }
 void UniversalTime::setMonth(int month)
 {
@@ -146,10 +147,22 @@ void UniversalTime::setTime(UniversalTime time)
     Millisecond = time.getMillisecond();
     Microsecond = time.getMicosecond();
 }
+#ifdef NOW_ESP32_RTC
+void UniversalTime::setTime(struct tm timeinfo)
+{
+    setYear(timeinfo.tm_year);
+    setMonth(timeinfo.tm_mon);
+    setDay(timeinfo.tm_mday);
+    setHour(timeinfo.tm_hour);
+    setMinute(timeinfo.tm_min);
+    setSecond(timeinfo.tm_sec);
+}
+#endif
 // Add
 void UniversalTime::addYear(int year)
 {
     Year += year;
+    LeapYear = ((Year % 4 == 0 && Year % 100 != 0) || Year % 400 == 0);
 }
 void UniversalTime::addMonth(int month)
 {
@@ -164,11 +177,59 @@ void UniversalTime::addMonth(int month)
 void UniversalTime::addDay(int day)
 {
     Day += day;
-    int count = floor(double(Day) / 31.0);
-    Day -= count * 31.0;
-    if (count != 0)
+    while (1)
     {
-        addMonth(count);
+        if (Month == 2)
+        {
+            if (LeapYear)
+            {
+                if (Day > 29)
+                {
+                    Day -= 29.0;
+                    addMonth(1);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                if (Day > 28)
+                {
+                    Day -= 28.0;
+                    addMonth(1);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        else if (Month == 4 || Month == 6 || Month == 9 || Month == 11)
+        {
+            if (Day > 30)
+            {
+                Day -= 30.0;
+                addMonth(1);
+            }
+            else
+            {
+                break;
+            }
+        }
+        else
+        {
+            if (Day > 31)
+            {
+                Day -= 31.0;
+                addMonth(1);
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 }
 void UniversalTime::addHour(int hour)
@@ -457,23 +518,23 @@ int UniversalTime::compare(
     double filterMicrosecond)
 {
     UniversalTime thistime;
-    thistime.setYear(filterYear*Year);
-    thistime.setMonth(filterMonth*Month);
-    thistime.setDay(filterDay*Day);
-    thistime.setHour(filterHour*Hour);
-    thistime.setMinute(filterMinute*Minute);
-    thistime.setSecond(filterSecond*Second);
-    thistime.setMillisecond(filterMillisecond*Millisecond);
-    thistime.setMicosecond(filterMicrosecond*Microsecond);
+    thistime.setYear(filterYear * Year);
+    thistime.setMonth(filterMonth * Month);
+    thistime.setDay(filterDay * Day);
+    thistime.setHour(filterHour * Hour);
+    thistime.setMinute(filterMinute * Minute);
+    thistime.setSecond(filterSecond * Second);
+    thistime.setMillisecond(filterMillisecond * Millisecond);
+    thistime.setMicosecond(filterMicrosecond * Microsecond);
     UniversalTime othertime;
-    othertime.setYear(filterYear*time.Year);
-    othertime.setMonth(filterMonth*time.Month);
-    othertime.setDay(filterDay*time.Day);
-    othertime.setHour(filterHour*time.Hour);
-    othertime.setMinute(filterMinute*time.Minute);
-    othertime.setSecond(filterSecond*time.Second);
-    othertime.setMillisecond(filterMillisecond*time.Millisecond);
-    othertime.setMicosecond(filterMicrosecond*time.Microsecond);
+    othertime.setYear(filterYear * time.Year);
+    othertime.setMonth(filterMonth * time.Month);
+    othertime.setDay(filterDay * time.Day);
+    othertime.setHour(filterHour * time.Hour);
+    othertime.setMinute(filterMinute * time.Minute);
+    othertime.setSecond(filterSecond * time.Second);
+    othertime.setMillisecond(filterMillisecond * time.Millisecond);
+    othertime.setMicosecond(filterMicrosecond * time.Microsecond);
 
     double utime = thistime.toUniversalTime();
     utime -= othertime.toUniversalTime();

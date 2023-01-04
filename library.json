@@ -1,6 +1,6 @@
 {
   "name": "Universaltime",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "A lib to work with time and typical time functions",
   "keywords": "arduino, time, esp32, iso8601, millis",
   "repository": {

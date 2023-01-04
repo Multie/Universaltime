@@ -9,6 +9,14 @@
 #endif
 
 
+#if !defined(NOW_MILLIS) && !defined(NOW_ESP32_RTC)
+#define NOW_MILLIS 1
+// #define NOW_ESP32_RTC
+#endif
+
+#ifdef NOW_ESP32_RTC
+#include <time.h>
+#endif
 
 class UniversalTime
 {
@@ -17,7 +25,7 @@ public:
     static UniversalTime UniversalTimeNow;
     static UniversalTime Now()
     {
-
+#ifdef NOW_MILLIS
         static unsigned long UniversalTimeMillisTimestemp;
         static unsigned long UniversalTimeMillisOffsetTimestemp;
 
@@ -32,6 +40,16 @@ public:
         UniversalTimeMillisTimestemp = mill;
         UniversalTimeMillisOffsetTimestemp = offest;
         UniversalTimeNow.addMillisecond(max(diff1, diff2));
+#endif
+
+#ifdef NOW_ESP32_RTC
+        time_t now;
+        struct tm timeinfo;
+        time(&now);
+        localtime_r(&now, &timeinfo);
+        UniversalTimeNow.setTime(timeinfo);
+#endif
+
         return UniversalTimeNow;
     }
     static void setNow(UniversalTime time)
@@ -57,6 +75,9 @@ public:
     void setMillisecond(int millisecond);
     void setMicosecond(int microsecond);
     void setTime(UniversalTime time);
+#ifdef NOW_ESP32_RTC
+    void setTime(struct tm timeinfo);
+#endif
     // Add
     void addYear(int year);
     void addMonth(int month);
@@ -75,14 +96,14 @@ public:
     double toUniversalTime();
     void fromUnsiversalTime(double time);
     /*
- * Compare times
- * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
- */
+     * Compare times
+     * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
+     */
     int compare(UniversalTime time);
-   /*
- * Compare times
- * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
- */
+    /*
+     * Compare times
+     * @return 0: times are equal, 1: this.time is greater as time, -1: this.time is smaller as time
+     */
     int compare(
         UniversalTime time,
         double filterYear,
@@ -112,6 +133,10 @@ private:
     int8_t Second;
     int Millisecond;
     int Microsecond;
+    bool LeapYear;
 };
-
+#ifndef UniversalTimeNow_val
+UniversalTime UniversalTime::UniversalTimeNow;
+#define UniversalTimeNow_val
+#endif
 #endif
